@@ -28,7 +28,7 @@ export default class App extends Component<{}> {
     this.state = {
       helloText: "Hello",
       showTextField: false,
-      list: [{key: 'Initial'}, {key: 'Values'}, {key: 'To'}, {key: 'The'}, {key: 'Flatlist'}],
+      list: [{key: 'Initial', value: "Initial"}, {key: 'Values', value: "Values"}, {key: 'To', value: "To"}, {key: 'The', value: 'The'}, {key: 'Flatlist', value: 'Flatlist'}],
       count: 0
     }
   }
@@ -45,7 +45,7 @@ export default class App extends Component<{}> {
 
   addToList(event) {
     this.setState({
-      list: this.state.list.concat([{key: this.state.helloText + this.state.count}]),
+      list: this.state.list.concat([{key: this.state.helloText + this.state.count, value: this.state.helloText}]),
       count: this.state.count + 1
     })
   }
@@ -56,7 +56,7 @@ export default class App extends Component<{}> {
         <View style={styles.listContainer}>
           <FlatList
             data={this.state.list}
-            renderItem={({item}) => <Text>{item.key}</Text>}
+            renderItem={({item}) => <Text>{item.value}</Text>}
           />
         </View>
         {/*
@@ -65,7 +65,8 @@ export default class App extends Component<{}> {
         */}
         <View style={styles.inputContainer}>
           <TextInput style={{width: 300}} onChangeText={(newText) => {this.setState({helloText: newText})}} value={this.state.helloText}/>
-          <Button style={{width: 1000}} onPress={this.addToList.bind(this)} title="Addd"></Button>
+          <Button style={{padding: 0, height: 50}} onPress={this.addToList.bind(this)} title="Add!"></Button>
+          <Button style={{padding: 0, height: 50}} onPress={this.startScan.bind(this)} title="StartScan"></Button>
         </View>
       </View>
     );
