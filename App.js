@@ -43,7 +43,7 @@ export default class App extends Component<{}> {
   }
 
   helloWorld(event) {
-    //AlertIOS.alert('Hello', 'world');
+    // AlertIOS.alert('Hello', 'world');
     /*this.setState({
       helloText: "Now I'm somthing else",
     });*/
