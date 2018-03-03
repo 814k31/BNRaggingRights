@@ -34,7 +34,8 @@ export default class App extends Component<{}> {
     this.state = {
       helloText: "Hello",
       showTextField: false,
-      list: [{key: 'Initial', value: "Initial"}, {key: 'Values', value: "Values"}, {key: 'To', value: "To"}, {key: 'The', value: 'The'}, {key: 'Flatlist', value: 'Flatlist'}],
+      // list: [{id: 'Initial', name: "Initial"}, {id: 'Values', name: "Values"}, {id: 'To', name: "To"}, {id: 'The', name: 'The'}, {id: 'Flatlist', name: 'Flatlist'}],
+      list: [],
       count: 0,
       buttonTitle: 'Start Scan',
       connectedDevice: null
