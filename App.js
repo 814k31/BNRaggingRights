@@ -143,6 +143,7 @@ export default class App extends Component<{}> {
           <Button style={{borderWidth: 1}} onPress={this.helloWorld.bind(this)} title={this.state.helloText} color="#841584"></Button>
         */}
         <View style={styles.inputContainer}>
+          {isConnected}
           {/*<TextInput style={{width: 300}} onChangeText={(newText) => {this.setState({helloText: newText})}} value={this.state.helloText}/>*/}
           {/*<Button style={{padding: 0, height: 50}} onPress={this.addToList.bind(this)} title="Add!"></Button>*/}
           <Button style={{padding: 0, height: 50}} onPress={this.startScan.bind(this)} title={this.state.buttonTitle}></Button>
