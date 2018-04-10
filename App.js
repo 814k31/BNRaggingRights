@@ -162,10 +162,10 @@ export default class App extends Component<{}> {
             renderItem={
               ({item}) => {
                 return (
-                  <TouchableHighlight
+                  <TouchableHighlight style={{alignSelf: 'stretch', alignItems: 'center'}}
                   underlayColor="green"
                   onPress={() => {this.connectToDevice(item)}}>
-                    <Text style={{margin: 30}}>{item.name}</Text>
+                    <Text style={{}}>{item.name}</Text>
                   </TouchableHighlight>
                 )
               }
@@ -207,7 +207,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     paddingLeft: 20,
     paddingRight: 20
