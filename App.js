@@ -217,6 +217,29 @@ const styles = StyleSheet.create({
     flex: 5,
     paddingTop: 40,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   }
 });
+
+
+// 0x23, 0xD1, 0x13, 0xEF, 0x5F, 0x78, 0x23, 0x15, 0xDE, 0xEF, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00
+
+
+
+
+
+
+
+
+// 03-31 18:33:05.869 15302-18545/com.reactnativeapp I/ReactNativeJS: 'service', { isPrimary: true,
+//                                                                      deviceID: 'F4:D0:B4:83:6C:07',
+//                                                                      uuid: '00001800-0000-1000-8000-00805f9b34fb',
+//                                                                      id: 1,
+// 03-31 18:33:05.944 15302-18545/com.reactnativeapp I/ReactNativeJS: 'service', { isPrimary: true,
+//                                                                      deviceID: 'F4:D0:B4:83:6C:07',
+//                                                                      uuid: '00001801-0000-1000-8000-00805f9b34fb',
+//                                                                      id: 5,
+// 03-31 18:33:06.033 15302-18545/com.reactnativeapp I/ReactNativeJS: 'service', { isPrimary: true,
+//                                                                      deviceID: 'F4:D0:B4:83:6C:07',
+//                                                                      uuid: '0000f00d-1212-efde-1523-785fef13d123',
+//                                                                      id: 6,
