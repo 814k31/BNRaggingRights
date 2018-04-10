@@ -16,6 +16,8 @@ import {
   TouchableHighlight
 } from 'react-native';
 
+import { Buffer } from 'buffer';
+
 import { BleManager } from 'react-native-ble-plx';
 
 const instructions = Platform.select({
@@ -55,8 +57,40 @@ export default class App extends Component<{}> {
   connectToDevice(device) {
     if (!this.state.connectedDevice) {
       this.manager.connectToDevice(device.id).then((res) => {
-        // console.log('connect res', res);
+        console.log('connect res', res);
         this.setState({connectedDevice: res});
+
+        //0x23, 0xD1, 0x13, 0xEF, 0x5F, 0x78, 0x23, 0x15, 0xDE, 0xEF, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00
+        //0xF00D
+
+        res.discoverAllServicesAndCharacteristics()
+          .then((newRes) => {
+            console.log('hello res!!!');
+
+            // console.log('newRes', newRes);
+            newRes.services().then(serviceArray => {
+              // console.log('serviceArray', serviceArray)
+
+              serviceArray.forEach(service => {
+                console.log('service', service.uuid);
+                service.characteristics().then(char => {
+                  if (char) console.log('char', char.uuid)
+                }).catch(error => {console.log('char error', error)})
+              });
+
+              this.state.connectedDevice.readCharacteristicForService('0000f00d-1212-efde-1523-785fef13d123', '0000beef-1212-efde-1523-785fef13d123')
+                .then((res) => {
+                  console.log('characteristic value base64', res.value)
+                  var hexString = new Buffer(res.value, 'base64').toString('hex')
+                  console.log('characteristic value hex', hexString)
+                }).catch(err => {
+                  console.log('read err', err)
+                });
+            })
+          })
+          .catch((err) => {
+            console.log('discoverAllServicesAndCharacteristics error', err);
+          });
       });
     } else {
       this.state.connectedDevice.cancelConnection().then((res) => {
