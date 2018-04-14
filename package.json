@@ -13,7 +13,7 @@
     "buffer": "^5.1.0",
     "react": "16.0.0",
     "react-native": "0.51.0",
-    "react-native-ble-plx": "^0.8.0",
+    "react-native-ble-plx": "file:///Users/814k31/Develop/react-native-ble-plx",
     "react-router-native": "^4.2.0"
   },
   "devDependencies": {
