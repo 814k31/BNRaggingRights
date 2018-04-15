@@ -49,7 +49,7 @@ export default class App extends Component<{}> {
                         console.log('service', service.uuid);
                         service.characteristics().then(characteristic => {
                             if (characteristic) console.log('characteristic', characteristic.uuid);
-                        }).catch(error => {console.log('characteristic error', error)})
+                        }).catch(error => console.log('characteristic error', error))
                     });
 
                     this.state.connectedDevice.readCharacteristicForService('0000f00d-1212-efde-1523-785fef13d123', '0000beef-1212-efde-1523-785fef13d123')
@@ -57,13 +57,9 @@ export default class App extends Component<{}> {
                             console.log('characteristic value base64', res.value);
                             var hexString = new Buffer(res.value, 'base64').toString('hex');
                             console.log('characteristic value hex', hexString);
-                        }).catch(err => {
-                            console.log('read err', err);
-                        });
+                        }).catch(err => console.log('read err', err));
                 });
-            }).catch((err) => {
-                console.log('discoverAllServicesAndCharacteristics error', err);
-            });
+            }).catch((err) => console.log('discoverAllServicesAndCharacteristics error', err));
         });
     }
 
@@ -83,9 +79,7 @@ export default class App extends Component<{}> {
             console.log('Found Device: ', device.name);
 
             // Check if the device has already been added
-            if (this.state.list.find((element) => {
-                return element.id === device.id;
-            })) {
+            if (this.state.list.find((element) => (element.id === device.id))) {
                 // Don't add devices if they have already been found
                 return;
             }
@@ -93,7 +87,7 @@ export default class App extends Component<{}> {
             var newDevice = {
                 id: device.id,
                 name: device.name
-            }
+            };
 
             this.setState({list: deviceList.concat(newDevice)});
         });
@@ -122,13 +116,13 @@ export default class App extends Component<{}> {
                                     onPress={() => {this.connectToDevice(device)}}>
                                     <Text>{device.name}</Text>
                                 </TouchableHighlight>
-                            )
+                            );
                         }}
                     />
                 </View>
                 <View style={styles.inputContainer}>
                     {isConnected}
-                    <Button style={{padding: 0, height: 50}} onPress={this.startScan.bind(this)} title={this.state.buttonTitle}></Button>
+                    <Button style={{ padding: 0, height: 50 }} onPress={this.startScan.bind(this)} title={this.state.buttonTitle}></Button>
                 </View>
             </View>
         );
