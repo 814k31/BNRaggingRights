@@ -1,16 +1,8 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
-  TextInput,
   Button,
   FlatList,
   TouchableHighlight
@@ -20,15 +12,6 @@ import { Buffer } from 'buffer';
 
 import { BleManager } from 'react-native-ble-plx';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-// const bleManager = new BleManager();
-
 export default class App extends Component<{}> {
   constructor() {
     super();
@@ -36,22 +19,11 @@ export default class App extends Component<{}> {
     this.state = {
       helloText: "Hello",
       showTextField: false,
-      // list: [{id: 'Initial', name: "Initial"}, {id: 'Values', name: "Values"}, {id: 'To', name: "To"}, {id: 'The', name: 'The'}, {id: 'Flatlist', name: 'Flatlist'}],
       list: [],
       count: 0,
       buttonTitle: 'Start Scan',
       connectedDevice: null
     }
-  }
-
-  helloWorld(event) {
-    // AlertIOS.alert('Hello', 'world');
-    /*this.setState({
-      helloText: "Now I'm somthing else",
-    });*/
-    this.setState({
-      showTextField: !this.state.showTextField
-    })
   }
 
   connectToDevice(device) {
@@ -65,11 +37,7 @@ export default class App extends Component<{}> {
 
         res.discoverAllServicesAndCharacteristics()
           .then((newRes) => {
-            console.log('hello res!!!');
-
-            // console.log('newRes', newRes);
             newRes.services().then(serviceArray => {
-              // console.log('serviceArray', serviceArray)
 
               serviceArray.forEach(service => {
                 console.log('service', service.uuid);
@@ -101,38 +69,33 @@ export default class App extends Component<{}> {
   }
 
   startScan(event) {
-    // this.manager.state().then((res) => {
-    //   console.log("hello worldss " + res);
-    // });
-    if (!this.state.scanning) {
-      this.manager.startDeviceScan(null, null, (error, device) => {
-        // console.log('device', device);
-        // console.log('device name', device.name);
-        // console.log('device id', device.id);
-        if (device.name) {
-          console.log('device name', device.name);
-          var deviceList = this.state.list;
-
-          if (deviceList.find((element) => {
-            return element.id === device.id
-          })) {
-            return;
-          }
-
-          var newDevice = {
-            id: device.id,
-            name: device.name
-          }
-
-          this.setState({list: deviceList.concat(newDevice)});
-        }
-      })
-      this.setState({scanning: true, buttonTitle: 'Stop Scan'});
-    } else {
-      this.manager.stopDeviceScan()
-      this.setState({scanning: false, buttonTitle: 'Start Scan'});
+    if (this.state.scanning) {
+    this.manager.stopDeviceScan()
+        this.setState({scanning: false, buttonTitle: 'Start Scan'});
+        return;
     }
 
+  this.manager.startDeviceScan(null, null, (error, device) => {
+    if (device.name) {
+      console.log('Found Device: ', device.name);
+
+      // Check if the device has already been added
+      if (this.state.list.find((element) => {
+        return element.id === device.id;
+      })) {
+        // Don't add devices if they have already been found
+        return;
+      }
+
+      var newDevice = {
+        id: device.id,
+        name: device.name
+      }
+
+      this.setState({list: deviceList.concat(newDevice)});
+    }
+  })
+  this.setState({scanning: true, buttonTitle: 'Stop Scan'});
   }
 
   addToList(event) {
@@ -143,43 +106,28 @@ export default class App extends Component<{}> {
   }
 
   render() {
-    // { connectedDevice } = this.state;
-
-    var isConnected = null;
-    if (this.state.connectedDevice) {
-      isConnected = (
-        <Text>Connected To: {this.state.connectedDevice.name}</Text>
-      );
-    }
-
+    var isConnected = this.state.connectedDevice ? <Text>Connected To: {this.state.connectedDevice.name}</Text> : null;
     return (
        <View style={styles.container}>
         <View style={styles.listContainer}>
           <FlatList
             data={this.state.list}
-            // renderItem={({item}) => <Text>{item.value}</Text>}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(device) => device.id}
             renderItem={
-              ({item}) => {
+              ({device}) => {
                 return (
                   <TouchableHighlight style={{alignSelf: 'stretch', alignItems: 'center'}}
                   underlayColor="green"
-                  onPress={() => {this.connectToDevice(item)}}>
-                    <Text style={{}}>{item.name}</Text>
+                  onPress={() => {this.connectToDevice(device)}}>
+                    <Text>{device.name}</Text>
                   </TouchableHighlight>
                 )
               }
             }
           />
         </View>
-        {/*
-          <ActivityIndicator size="large" color="#0000ff" />
-          <Button style={{borderWidth: 1}} onPress={this.helloWorld.bind(this)} title={this.state.helloText} color="#841584"></Button>
-        */}
         <View style={styles.inputContainer}>
           {isConnected}
-          {/*<TextInput style={{width: 300}} onChangeText={(newText) => {this.setState({helloText: newText})}} value={this.state.helloText}/>*/}
-          {/*<Button style={{padding: 0, height: 50}} onPress={this.addToList.bind(this)} title="Add!"></Button>*/}
           <Button style={{padding: 0, height: 50}} onPress={this.startScan.bind(this)} title={this.state.buttonTitle}></Button>
         </View>
       </View>
@@ -224,22 +172,26 @@ const styles = StyleSheet.create({
 
 // 0x23, 0xD1, 0x13, 0xEF, 0x5F, 0x78, 0x23, 0x15, 0xDE, 0xEF, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00
 
-
-
-
-
-
-
-
-// 03-31 18:33:05.869 15302-18545/com.reactnativeapp I/ReactNativeJS: 'service', { isPrimary: true,
-//                                                                      deviceID: 'F4:D0:B4:83:6C:07',
-//                                                                      uuid: '00001800-0000-1000-8000-00805f9b34fb',
-//                                                                      id: 1,
-// 03-31 18:33:05.944 15302-18545/com.reactnativeapp I/ReactNativeJS: 'service', { isPrimary: true,
-//                                                                      deviceID: 'F4:D0:B4:83:6C:07',
-//                                                                      uuid: '00001801-0000-1000-8000-00805f9b34fb',
-//                                                                      id: 5,
-// 03-31 18:33:06.033 15302-18545/com.reactnativeapp I/ReactNativeJS: 'service', { isPrimary: true,
-//                                                                      deviceID: 'F4:D0:B4:83:6C:07',
-//                                                                      uuid: '0000f00d-1212-efde-1523-785fef13d123',
-//                                                                      id: 6,
+// Found Services [
+// {
+//     isPrimary: true,
+//     deviceID: 'F4:D0:B4:83:6C:07',
+//     uuid: '00001800-0000-1000-8000-00805f9b34fb',
+//     id: 1,
+//     ...
+// },
+// {
+//     isPrimary: true,
+//     deviceID: 'F4:D0:B4:83:6C:07',
+//     uuid: '00001801-0000-1000-8000-00805f9b34fb',
+//     id: 5,
+//     ...
+// },
+// {
+//     isPrimary: true,
+//     deviceID: 'F4:D0:B4:83:6C:07',
+//     uuid: '0000f00d-1212-efde-1523-785fef13d123',
+//     id: 6,
+//     ...
+// }
+//]
