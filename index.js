@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
 import App from './src/App';
 
-AppRegistry.registerComponent('reactNativeApp', () => App);
+AppRegistry.registerComponent('BNRaggingRights', () => App);
