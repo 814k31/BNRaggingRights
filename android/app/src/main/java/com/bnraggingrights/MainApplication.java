@@ -1,4 +1,4 @@
-package com.reactnativeapp;
+package com.bnraggingrights;
 
 import android.app.Application;
 

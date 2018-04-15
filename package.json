@@ -1,5 +1,5 @@
 {
-  "name": "reactNativeApp",
+  "name": "BNRaggingRights",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "buffer": "^5.1.0",
-    "react": "16.0.0",
-    "react-native": "0.51.0",
-    "react-native-ble-plx": "^0.8.0",
+    "react": "16.3.1",
+    "react-native": "0.55.2",
+    "react-native-ble-plx": "file:///Users/814k31/Develop/react-native-ble-plx",
     "react-router-native": "^4.2.0"
   },
   "devDependencies": {
