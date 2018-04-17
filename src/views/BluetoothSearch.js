@@ -17,8 +17,6 @@ export default class BluetoothSearch extends Component<{}> {
         super();
         this.manager = new BleManager();
         this.state = {
-            helloText: "Hello",
-            showTextField: false,
             list: [],
             count: 0,
             buttonTitle: 'Start Scan',
@@ -30,7 +28,6 @@ export default class BluetoothSearch extends Component<{}> {
         if (this.state.connectedDevice) {
             // Disconnect From Device
             this.state.connectedDevice.cancelConnection().then((res) => {
-                console.log('device.cancelConnection res', res);
                 this.setState({ connectedDevice: null });
             });
             return;
@@ -40,28 +37,7 @@ export default class BluetoothSearch extends Component<{}> {
             console.log('connect res', res);
             this.setState({connectedDevice: res});
 
-            this.setDevice(res);
-
-            //0x23, 0xD1, 0x13, 0xEF, 0x5F, 0x78, 0x23, 0x15, 0xDE, 0xEF, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00
-            //0xF00D
-
-            // res.discoverAllServicesAndCharacteristics().then((newRes) => {
-            //     newRes.services().then(serviceArray => {
-            //         serviceArray.forEach(service => {
-            //             console.log('service', service.uuid);
-            //             service.characteristics().then(characteristic => {
-            //                 if (characteristic) console.log('characteristic', characteristic.uuid);
-            //             }).catch(error => console.log('characteristic error', error))
-            //         });
-
-            //         this.state.connectedDevice.readCharacteristicForService('0000f00d-1212-efde-1523-785fef13d123', '0000beef-1212-efde-1523-785fef13d123')
-            //             .then((res) => {
-            //                 console.log('characteristic value base64', res.value);
-            //                 var hexString = new Buffer(res.value, 'base64').toString('hex');
-            //                 console.log('characteristic value hex', hexString);
-            //             }).catch(err => console.log('read err', err));
-            //     });
-            // }).catch((err) => console.log('discoverAllServicesAndCharacteristics error', err));
+            // this.setDevice(res);
         });
     }
 
@@ -74,35 +50,20 @@ export default class BluetoothSearch extends Component<{}> {
 
         this.manager.startDeviceScan(null, null, (error, device) => {
             if (!device.name) {
-                console.error('Device has no name');
+                console.log('Device has no name', device);
                 return;
             }
 
-            console.log('Found Device: ', device.name);
-            console.log('list', this.state.list);
             // Check if the device has already been added
             if (this.state.list.find((element) => (element.id === device.id))) {
                 // Don't add devices if they have already been found
                 return;
             }
 
-            var newDevice = {
-                id: device.id,
-                name: device.name
-            };
-
-            console.log('newDevice', newDevice)
-
-            this.setState({list: this.state.list.concat(newDevice)});
+            this.setState({list: this.state.list.concat(device)});
+            console.log('this.state.list', this.state.list);
         });
         this.setState({scanning: true, buttonTitle: 'Stop Scan'});
-    }
-
-    addToList(event) {
-        this.setState({
-            list: this.state.list.concat([{key: this.state.helloText + this.state.count, value: this.state.helloText}]),
-            count: this.state.count + 1
-        });
     }
 
     render() {
@@ -113,14 +74,12 @@ export default class BluetoothSearch extends Component<{}> {
                     <FlatList
                         data={this.state.list}
                         keyExtractor={(device) => device.id}
-                        renderItem={({device}) => {
-                            console.log('renderItem', device)
-                            if (!device) return;
+                        renderItem={(device) => {
                             return (
                                 <TouchableHighlight style={{alignSelf: 'stretch', alignItems: 'center'}}
                                     underlayColor="green"
-                                    onPress={() => {this.connectToDevice(device)}}>
-                                    <Text>{device.name}</Text>
+                                    onPress={() => {this.connectToDevice(device.item)}}>
+                                    <Text>{device.item.name}</Text>
                                 </TouchableHighlight>
                             );
                         }}
@@ -168,6 +127,27 @@ const styles = StyleSheet.create({
     }
 });
 
+
+//0x23, 0xD1, 0x13, 0xEF, 0x5F, 0x78, 0x23, 0x15, 0xDE, 0xEF, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00
+//0xF00D
+
+// res.discoverAllServicesAndCharacteristics().then((newRes) => {
+//     newRes.services().then(serviceArray => {
+//         serviceArray.forEach(service => {
+//             console.log('service', service.uuid);
+//             service.characteristics().then(characteristic => {
+//                 if (characteristic) console.log('characteristic', characteristic.uuid);
+//             }).catch(error => console.log('characteristic error', error))
+//         });
+
+//         this.state.connectedDevice.readCharacteristicForService('0000f00d-1212-efde-1523-785fef13d123', '0000beef-1212-efde-1523-785fef13d123')
+//             .then((res) => {
+//                 console.log('characteristic value base64', res.value);
+//                 var hexString = new Buffer(res.value, 'base64').toString('hex');
+//                 console.log('characteristic value hex', hexString);
+//             }).catch(err => console.log('read err', err));
+//     });
+// }).catch((err) => console.log('discoverAllServicesAndCharacteristics error', err));
 
 // 0x23, 0xD1, 0x13, 0xEF, 0x5F, 0x78, 0x23, 0x15, 0xDE, 0xEF, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00
 
