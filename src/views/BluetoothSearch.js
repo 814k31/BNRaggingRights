@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  FlatList,
-  TouchableHighlight
+    ActivityIndicator,
+    Button,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { Buffer } from 'buffer';
@@ -20,24 +21,31 @@ export default class BluetoothSearch extends Component<{}> {
             list: [],
             count: 0,
             buttonTitle: 'Start Scan',
-            connectedDevice: null
+            connectedDevice: null,
+            connecting: false
         };
     }
 
     connectToDevice(device) {
+        // If device exists disconnect
+        this.setState({ connecting: true });
         if (this.state.connectedDevice) {
-            // Disconnect From Device
             this.state.connectedDevice.cancelConnection().then((res) => {
-                this.setState({ connectedDevice: null });
+                this.setState({ connectedDevice: null, connecting: false });
             });
             return;
         }
 
+        // Connect to device
         this.manager.connectToDevice(device.id).then((res) => {
             console.log('connect res', res);
-            this.setState({connectedDevice: res});
-
-            // this.setDevice(res);
+            this.setState({
+                connectedDevice: res,
+                buttonTitle: 'Start Scan',
+                connecting: false
+            });
+            this.manager.stopDeviceScan();
+            this.props.setDevice(res);
         });
     }
 
@@ -68,19 +76,26 @@ export default class BluetoothSearch extends Component<{}> {
 
     render() {
         var isConnected = this.state.connectedDevice ? <Text>Connected To: {this.state.connectedDevice.name}</Text> : null;
+        var isConnecting = this.state.connecting ? (
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size='large' color='#ff0000' />
+            </View>
+        ): null;
+
         return (
             <View style={styles.container}>
+                {isConnecting}
                 <View style={styles.listContainer}>
                     <FlatList
                         data={this.state.list}
                         keyExtractor={(device) => device.id}
                         renderItem={(device) => {
                             return (
-                                <TouchableHighlight style={{alignSelf: 'stretch', alignItems: 'center'}}
+                                <TouchableOpacity style={{ padding: 10, alignSelf: 'stretch', alignItems: 'center' }}
                                     underlayColor="green"
-                                    onPress={() => {this.connectToDevice(device.item)}}>
+                                    onPress={() => this.connectToDevice(device.item)}>
                                     <Text>{device.item.name}</Text>
-                                </TouchableHighlight>
+                                </TouchableOpacity>
                             );
                         }}
                     />
@@ -124,6 +139,7 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'stretch'
     }
 });
 

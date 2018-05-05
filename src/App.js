@@ -37,24 +37,29 @@ export default class App extends Component<{}> {
                         return (
                             <View style={{flex: 1}}>
                                 {redirectToDevice}
-                                <BluetoothSearch device={this.state.device} setDevice={this.setDevice} />
+                                <BluetoothSearch device={this.state.device} setDevice={(inDevice) => this.setDevice(inDevice)} />
                             </View>
                         );
                     }} />
                     <Route exact path='/connected' render={(match) => {
                         var deviceKeys = []
                         for (var key in this.state.connectedDevice) {
-                            if (this.state.connectedDevice.hasOwnProperty(key)) {
-                                deviceKeys.push(<Text>key: {this.state.connectedDevice[key]}</Text>);
+                            if (typeof this.state.connectedDevice[key] !== 'object') {
+                                if (this.state.connectedDevice.hasOwnProperty(key)) {
+                                    deviceKeys.push(<Text>key: {JSON.stringify(this.state.connectedDevice[key])}</Text>);
+                                }
                             }
                         }
 
-                        <View style={{ flex:1 }}>
-                            <FlatList
-                                data={deviceKeys}
-                                renderItem={({item}) => item}
-                            />
-                        </View>
+                        return (
+                            <View style={{ flex:1 }}>
+                                <FlatList
+                                    keyExtractor={(item, index) => index.toString()}
+                                    data={deviceKeys}
+                                    renderItem={({item}) => item}
+                                />
+                            </View>
+                        );
                     }} />
                 </Switch>
             </NativeRouter>
