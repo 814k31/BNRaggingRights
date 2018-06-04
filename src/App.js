@@ -11,6 +11,7 @@ import {
 import { NativeRouter, Route, Switch, Redirect } from 'react-router-native';
 
 import BluetoothSearch from './views/BluetoothSearch';
+import Dashboard from './views/Dashboard';
 
 export default class App extends Component<{}> {
     constructor() {
@@ -31,6 +32,7 @@ export default class App extends Component<{}> {
         return (
             <NativeRouter>
                 <Switch>
+                    <Route exact path='/dashboard' component={Dashboard} />
                     <Route exact path='/' render={() => {
                         var redirectToDevice = this.state.connectedDevice ? <Redirect to='/connected' push /> : null;
 
