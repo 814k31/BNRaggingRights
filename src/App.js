@@ -34,7 +34,7 @@ export default class App extends Component<{}> {
                 <Switch>
                     <Route exact path='/dashboard' component={Dashboard} />
                     <Route exact path='/' render={() => {
-                        var redirectToDevice = this.state.connectedDevice ? <Redirect to='/connected' push /> : null;
+                        let redirectToDevice = this.state.connectedDevice ? <Redirect to='/connected' push /> : null;
 
                         return (
                             <View style={{flex: 1}}>
@@ -44,8 +44,8 @@ export default class App extends Component<{}> {
                         );
                     }} />
                     <Route exact path='/connected' render={(match) => {
-                        var deviceKeys = []
-                        for (var key in this.state.connectedDevice) {
+                        let deviceKeys = []
+                        for (let key in this.state.connectedDevice) {
                             if (typeof this.state.connectedDevice[key] !== 'object') {
                                 if (this.state.connectedDevice.hasOwnProperty(key)) {
                                     deviceKeys.push(<Text>key: {JSON.stringify(this.state.connectedDevice[key])}</Text>);

@@ -75,8 +75,8 @@ export default class BluetoothSearch extends Component<{}> {
     }
 
     render() {
-        var isConnected = this.state.connectedDevice ? <Text>Connected To: {this.state.connectedDevice.name}</Text> : null;
-        var isConnecting = this.state.connecting ? (
+        let isConnected = this.state.connectedDevice ? <Text>Connected To: {this.state.connectedDevice.name}</Text> : null;
+        let isConnecting = this.state.connecting ? (
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size='large' color='#ff0000' />
             </View>
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
 //         this.state.connectedDevice.readCharacteristicForService('0000f00d-1212-efde-1523-785fef13d123', '0000beef-1212-efde-1523-785fef13d123')
 //             .then((res) => {
 //                 console.log('characteristic value base64', res.value);
-//                 var hexString = new Buffer(res.value, 'base64').toString('hex');
+//                 let hexString = new Buffer(res.value, 'base64').toString('hex');
 //                 console.log('characteristic value hex', hexString);
 //             }).catch(err => console.log('read err', err));
 //     });
