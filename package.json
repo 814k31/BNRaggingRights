@@ -10,11 +10,11 @@
     "ios": "react-native run-ios"
   },
   "dependencies": {
-    "buffer": "^5.1.0",
-    "react": "16.6.1",
+    "buffer": "^5.2.1",
+    "react": "^16.6.3",
     "react-native": "0.57.5",
     "react-native-ble-plx": "^1.0.0",
-    "react-router-native": "^4.2.0"
+    "react-router-native": "^4.3.0"
   },
   "devDependencies": {},
   "jest": {
