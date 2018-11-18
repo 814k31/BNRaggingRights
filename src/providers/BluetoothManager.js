@@ -33,8 +33,6 @@ export default class BluetoothManager extends Component {
     }
 
     connect(device) {
-        const { device } = this.state;
-
         this.setState({ isConnecting: true });
 
         // Connect to device
@@ -114,6 +112,7 @@ export default class BluetoothManager extends Component {
 
     stopScanning() {
     	const { isScanning } = this.state;
+
     	if (isScanning) {
             this.manager.stopDeviceScan();
             this.setState({ isScanning: false });
