@@ -68,7 +68,6 @@ export default class BluetoothManager extends Component {
             }
 
             if (!device.name) {
-                console.log('Device has no name', device);
                 return;
             }
 
@@ -77,8 +76,6 @@ export default class BluetoothManager extends Component {
                 // Don't add devices that have already been found
                 return;
             }
-
-            console.log('yay adding device', device);
 
             this.setState({ foundDevices: foundDevices.concat(device) });
         });
