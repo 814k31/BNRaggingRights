@@ -16,16 +16,26 @@ import { withBluetooth } from '../providers';
 import { Buffer } from 'buffer';
 
 class BluetoothSearch extends Component {
-    startScan() {
+    scan() {
         const { bluetooth } = this.props;
+
         if (bluetooth.isScanning) {
             bluetooth.stopScanning();
-            this.setState({ buttonTitle: 'Start Scan' });
-            return;
         }
 
-        this.setState({ scanning: true, buttonTitle: 'Stop Scan'});
         bluetooth.scan();
+    }
+
+    renderFoundDevice(device) {
+        const { bluetooth } = this.props;
+
+        return (
+            <TouchableOpacity style={{ padding: 10, alignSelf: 'stretch', alignItems: 'center' }}
+                underlayColor="green"
+                onPress={() => bluetooth.connect(device.item)}>
+                <Text>{device.item.name}</Text>
+            </TouchableOpacity>
+        );
     }
 
     render() {
@@ -49,27 +59,13 @@ class BluetoothSearch extends Component {
                     <FlatList
                         data={bluetooth.foundDevices}
                         keyExtractor={(device) => device.id}
-                        renderItem={(device) => {
-                            return (
-                                <TouchableOpacity style={{ padding: 10, alignSelf: 'stretch', alignItems: 'center' }}
-                                    underlayColor="green"
-                                    onPress={() => bluetooth.connect(device.item)}>
-                                    <Text>{device.item.name}</Text>
-                                </TouchableOpacity>
-                            );
-                        }}
+                        renderItem={(device) => this.renderFoundDevice(device)}
                     />
                 </View>
                 <View style={styles.inputContainer}>
                     <Button
                         style={{ padding: 0, height: 50 }}
-                        onPress={() => {
-                            if (bluetooth.isScanning) {
-                                bluetooth.stopScanning();
-                            } else {
-                                bluetooth.scan();
-                            }
-                        }}
+                        onPress={() => this.scan()}
                         title={buttonTitle}
                     />
                 </View>
