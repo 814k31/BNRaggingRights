@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Button, Text, View } from 'react-native';
 
-export default class App extends Component<{}> {
-    constructor() {
-        super();
-    }
+import { withBluetooth } from '../providers';
 
-    setDevice(inDevice) {}
-
+class Dashboard extends Component {
     render() {
-        return <Text>Dashboard</Text>;
+        const { bluetooth } = this.props;
+        return (
+            <View>
+                <Text>Dashboard</Text>
+                <Button title="Disconnect" onPress={bluetooth.disconnect} />
+            </View>
+        );
     }
 }
+
+export default withBluetooth(Dashboard);
