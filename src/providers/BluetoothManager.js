@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { BleManager } from 'react-native-ble-plx';
+import { Buffer } from 'buffer';
 
 // Create's authentication context to be use anywhere in the app
 export const BluetoothManagerContext = React.createContext();
@@ -39,9 +40,9 @@ export default class BluetoothManager extends Component {
         this.manager.connectToDevice(device.id)
         	.then((res) => {
 	            this.setState({
-	                device: res,
+	                // device: res,
 	                isConnecting: false
-	            }, () => this.onConnected());
+	            }, () => this.scanServicesAndCharacteristics(res));
                 this.stopScanning();
 	        })
 	        .catch((err) => {
@@ -80,20 +81,43 @@ export default class BluetoothManager extends Component {
         });
     }
 
-    onConnected() {
-        this.scanServicesAndCharacteristics();
-    }
-
-    scanServicesAndCharacteristics() {
+    subscribeToTemperature(callback = () => {}) {
         const { device } = this.state;
 
+        console.log('subscribeToTemperature', device.id);
+
+        this.manager.monitorCharacteristicForDevice(
+            device.id,
+            '0000f00d-1212-efde-1523-785fef13d123',
+            '0000beef-1212-efde-1523-785fef13d123',
+            (err, characteristic) => {
+                if (err) {
+                    console.warn('Temperature callback error', err);
+                    return;
+                }
+
+                console.log('characteristic', characteristic);
+                const value = new Buffer(characteristic.value, 'base64');
+                callback(value[0]);
+            }
+        );
+    }
+
+    onConnected() {
+        console.log('onConnected');
+        // this.scanServicesAndCharacteristics();
+    }
+
+    scanServicesAndCharacteristics(device) {
+        // const { device } = this.state;
+        console.log('scanServicesAndCharacteristics');
         if (!device) return;
 
         device.discoverAllServicesAndCharacteristics()
             .then((res) => {
                 res.services().then(serviceArray => {
                     console.log('serviceArray', serviceArray);
-                    this.setState({ services: serviceArray });
+                    this.setState({ device: device, services: serviceArray });
                     // serviceArray.forEach(service => {
                     //     service.characteristics().then(characteristic => {
                     //         if (characteristic) console.log('characteristic', characteristic.uuid);
@@ -144,7 +168,8 @@ export default class BluetoothManager extends Component {
                         connect: inDevice => this.connect(inDevice),
                         disconnect: () => this.disconnect(),
                         scan: () => this.scan(),
-                        stopScanning: () => this.stopScanning()
+                        stopScanning: () => this.stopScanning(),
+                        subscribeToTemperature: callback => this.subscribeToTemperature(callback)
                     }
                 }}
             >
