@@ -9,6 +9,8 @@ import {
     View,
 } from 'react-native';
 
+import { Redirect } from 'react-router-native';
+
 import { withBluetooth } from '../providers';
 
 import { Buffer } from 'buffer';
@@ -29,11 +31,7 @@ class BluetoothSearch extends Component {
     render() {
         const { bluetooth } = this.props;
 
-        const isConnected = bluetooth.device
-            ? <Text>Connected To: {bluetooth.device.name}</Text>
-            : null;
-
-        const isConnecting = bluetooth.isConnecting ? (
+        const connectingSpinner = bluetooth.isConnecting ? (
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size='large' color='#ff0000' />
             </View>
@@ -45,7 +43,8 @@ class BluetoothSearch extends Component {
 
         return (
             <View style={styles.container}>
-                {isConnecting}
+                {bluetooth.device ? <Redirect to="/" /> : null}
+                {connectingSpinner}
                 <View style={styles.listContainer}>
                     <FlatList
                         data={bluetooth.foundDevices}
@@ -62,7 +61,6 @@ class BluetoothSearch extends Component {
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    {isConnected}
                     <Button
                         style={{ padding: 0, height: 50 }}
                         onPress={() => {
