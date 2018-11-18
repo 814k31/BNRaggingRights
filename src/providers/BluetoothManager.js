@@ -43,7 +43,7 @@ export default class BluetoothManager extends Component {
 	                device: res,
 	                isConnecting: false
 	            });
-	            this.manager.stopDeviceScan();
+	            this.stopScanning();
 	        })
 	        .catch((err) => {
 	        	console.warn('Error connecting to device', err);
