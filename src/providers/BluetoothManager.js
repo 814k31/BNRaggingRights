@@ -27,23 +27,24 @@ export default class BluetoothManager extends Component {
             device: null,
             foundDevices: [],
             isConnecting: false,
-            isScanning: false
+            isScanning: false,
+            services: []
         };
     }
 
     connect(device) {
-        // If device exists disconnect
+        const { device } = this.state;
+
         this.setState({ isConnecting: true });
 
         // Connect to device
         this.manager.connectToDevice(device.id)
         	.then((res) => {
-	            console.log('connect res', res);
 	            this.setState({
 	                device: res,
 	                isConnecting: false
-	            });
-	            this.stopScanning();
+	            }, () => this.onConnected());
+                this.stopScanning();
 	        })
 	        .catch((err) => {
 	        	console.warn('Error connecting to device', err);
@@ -81,6 +82,36 @@ export default class BluetoothManager extends Component {
         });
     }
 
+    onConnected() {
+        this.scanServicesAndCharacteristics();
+    }
+
+    scanServicesAndCharacteristics() {
+        const { device } = this.state;
+
+        if (!device) return;
+
+        device.discoverAllServicesAndCharacteristics()
+            .then((res) => {
+                res.services().then(serviceArray => {
+                    console.log('serviceArray', serviceArray);
+                    this.setState({ services: serviceArray });
+                    // serviceArray.forEach(service => {
+                    //     service.characteristics().then(characteristic => {
+                    //         if (characteristic) console.log('characteristic', characteristic.uuid);
+                    //     }).catch(error => console.log('characteristic error', error))
+                    });
+
+                //     this.state.connectedDevice.readCharacteristicForService('0000f00d-1212-efde-1523-785fef13d123', '0000beef-1212-efde-1523-785fef13d123')
+                //         .then((res) => {
+                //             console.log('characteristic value base64', res.value);
+                //             let hexString = new Buffer(res.value, 'base64').toString('hex');
+                //             console.log('characteristic value hex', hexString);
+                //         }).catch(err => console.log('read err', err));
+            })
+            .catch((err) => console.warn('discoverAllServicesAndCharacteristics error', err));
+    }
+
     stopScanning() {
     	const { isScanning } = this.state;
     	if (isScanning) {
@@ -92,7 +123,13 @@ export default class BluetoothManager extends Component {
     disconnect() {
     	const { device } = this.state;
 		device.cancelConnection()
-			.then(res => this.setState({ device: null }))
+			.then((res) => {
+                this.setState({
+                    device: null,
+                    services: [],
+                    characteristic: []
+                });
+            })
 	        .catch(err => console.warn('Error Disconnecting to device', err));
     }
 
