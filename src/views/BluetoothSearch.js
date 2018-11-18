@@ -40,8 +40,8 @@ class BluetoothSearch extends Component {
         ): null;
 
         const buttonTitle = bluetooth.isScanning
-            ? 'Stop Scannn'
-            : 'Start Scannn';
+            ? 'Stop Scan'
+            : 'Start Scan';
 
         return (
             <View style={styles.container}>
