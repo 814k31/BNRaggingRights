@@ -94,6 +94,15 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+    // signingConfigs {
+    //     config {
+    //         keyAlias BNRAGGING_RIGHTS_RELEASE_KEY_ALIAS
+    //         keyPassword BNRAGGING_RIGHTS_RELEASE_KEY_PASSWORD
+    //         storeFile file(BNRAGGING_RIGHTS_RELEASE_STORE_FILE)
+    //         storePassword BNRAGGING_RIGHTS_RELEASE_STORE_PASSWORD
+    //     }
+    // }
+
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
