@@ -71,13 +71,15 @@ export default class BluetoothManager extends Component {
                 return;
             }
 
-            // Check if the device has already been added
-            if (foundDevices.find((element) => (element.id === device.id))) {
-                // Don't add devices that have already been found
-                return;
-            }
-
-            this.setState({ foundDevices: foundDevices.concat(device) });
+            this.setState(() => {
+                // Check if the device has already been added
+                if (this.state.foundDevices.find((element) => (element.id === device.id))) {
+                    // Don't add devices that have already been found
+                    return;
+                }
+                console.log('foundDevices', [...this.state.foundDevices, device]);
+                return { foundDevices: [...this.state.foundDevices, device] }
+            });
         });
     }
 
