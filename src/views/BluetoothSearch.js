@@ -30,7 +30,7 @@ class BluetoothSearch extends Component {
         const { bluetooth } = this.props;
 
         return (
-            <TouchableOpacity style={{ padding: 10, alignSelf: 'stretch', alignItems: 'center' }}
+            <TouchableOpacity key={device.item.id} style={{ padding: 10, alignSelf: 'stretch', alignItems: 'center' }}
                 underlayColor="green"
                 onPress={() => bluetooth.connect(device.item)}>
                 <Text>{device.item.name}</Text>

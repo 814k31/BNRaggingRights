@@ -16,7 +16,7 @@ class Dashboard extends Component {
         const { bluetooth } = this.props;
         bluetooth.subscribeToTemperature((value) => {
             this.setState({
-                temperature: Math.round((value - 32) * 5 / 9)
+                temperature: Math.round(value / 4)
             })
         });
     }
