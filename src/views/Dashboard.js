@@ -26,10 +26,18 @@ class Dashboard extends Component {
         const { temperature } = this.state;
 
         return (
-            <View>
-                <Text>Dashboard</Text>
-                <Text>Temperature: {temperature}</Text>
-                <Button title="Disconnect" onPress={bluetooth.disconnect} />
+            <View style={{ flex: 1 }}>
+                <View style={{ alignItems: 'center' }}>
+                    <Text style={{ fontSize: 30 }}>Device </Text>
+                    <Text style={{ fontSize: 20 }}>{bluetooth.device.name}</Text>
+                </View>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 40, fontWeight: 'bold' }}>Temperature</Text>
+                    <Text style={{ fontSize: 40 }}>{temperature} °C</Text>
+                </View>
+                <View style={{ margin: 10 }}>
+                    <Button title="Disconnect" onPress={bluetooth.disconnect} />
+                </View>
             </View>
         );
     }
