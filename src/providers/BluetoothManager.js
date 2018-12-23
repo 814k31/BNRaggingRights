@@ -39,6 +39,8 @@ export default class BluetoothManager extends Component {
         // Connect to device
         this.manager.connectToDevice(device.id)
         	.then((res) => {
+                res.onDisconnect(() => this.setState({ device: null }));
+
 	            this.setState({
 	                // device: res,
 	                isConnecting: false
